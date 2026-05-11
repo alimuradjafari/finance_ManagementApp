@@ -298,7 +298,7 @@ engine = RecommendationEngine()
 categorizer = TransactionCategorizer()
 
 # ─── Main Content ─────────────────────────────────────────────────────────────
-st.markdown("# 💰 Personal Finance Management System")
+st.markdown("# Personal Finance Management System")
 st.markdown("*AI-powered insights | Design Patterns | SE-211 Lab 14*")
 st.divider()
 
@@ -309,11 +309,13 @@ tabs = st.tabs(["📊 Dashboard", "💳 Transactions", "🎯 Goals", "🤖 AI Re
 # ════════════════════════════════════════════════════════════
 with tabs[0]:
     txns = st.session_state.transactions
-    df = pd.DataFrame(txns)
-    income_txns = df[df["type"] == "income"]["amount"].sum()
-    expense_txns = df[df["type"] == "expense"]["amount"].sum()
-    savings_txns = df[df["type"] == "savings"]["amount"].sum()
-    invest_txns = df[df["type"] == "investment"]["amount"].sum()
+    df = pd.DataFrame(txns) if txns else pd.DataFrame(
+        columns=["id", "description", "amount", "type", "category", "date"]
+    )
+    income_txns  = df[df["type"] == "income"]["amount"].sum()     if not df.empty else 0.0
+    expense_txns = df[df["type"] == "expense"]["amount"].sum()    if not df.empty else 0.0
+    savings_txns = df[df["type"] == "savings"]["amount"].sum()    if not df.empty else 0.0
+    invest_txns  = df[df["type"] == "investment"]["amount"].sum() if not df.empty else 0.0
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("💵 Total Income", f"PKR {income_txns:,.0f}")
